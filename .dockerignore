@@ -1,0 +1,9 @@
+.pythonlibs/
+__pycache__/
+*.pyc
+.git/
+node_modules/
+artifacts/
+attached_assets/
+pyproject.toml
+uv.lock
