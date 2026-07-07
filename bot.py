@@ -332,6 +332,32 @@ async def refstats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# /preview  (admin — see the welcome message exactly as users will)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@admin_only
+async def preview(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    title        = get_setting("title")
+    welcome_text = get_setting("welcome_text")
+    caption      = f"{title}\n\n{welcome_text}" if title else welcome_text
+    keyboard     = build_keyboard()
+    delay        = get_setting("delay", "2")
+
+    await update.message.reply_text(
+        f"👁 *Aperçu du message de bienvenue* (délai actuel : {delay}s)\n\n"
+        "Voici exactement ce que verront vos utilisateurs :",
+        parse_mode="Markdown",
+    )
+
+    banner = find_banner()
+    if banner:
+        with open(banner, "rb") as img:
+            await update.message.reply_photo(photo=img, caption=caption, reply_markup=keyboard)
+    else:
+        await update.message.reply_text(caption, reply_markup=keyboard)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # /listbuttons
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -680,6 +706,7 @@ def main() -> None:
     app.add_handler(CommandHandler("stats",       stats))
     app.add_handler(CommandHandler("refstats",    refstats))
     app.add_handler(CommandHandler("listbuttons", listbuttons))
+    app.add_handler(CommandHandler("preview",     preview))
 
     # ── admin conversation commands ────────────────────────────────────────
     CANCEL = [CommandHandler("annuler", cancel)]
