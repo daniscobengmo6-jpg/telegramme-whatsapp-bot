@@ -1,0 +1,15 @@
+[build]
+builder = "DOCKERFILE"
+
+[deploy]
+startCommand = "python bot.py"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[deploy.envVars]]
+name = "DB_PATH"
+value = "/data/bot_data.db"
+
+[[deploy.envVars]]
+name = "PHOTO_PATH"
+value = "/data/banner.jpg"
