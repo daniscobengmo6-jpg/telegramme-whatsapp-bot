@@ -57,6 +57,11 @@ def init_db():
                 joined_at   TEXT DEFAULT (datetime('now'))
             )
         """)
+        # migrate: add referred_by if the table existed before this column
+        try:
+            conn.execute("ALTER TABLE users ADD COLUMN referred_by INTEGER")
+        except sqlite3.OperationalError:
+            pass  # column already exists
 
         # ── buttons table ───────────────────────────────────────────────────
         conn.execute("""
