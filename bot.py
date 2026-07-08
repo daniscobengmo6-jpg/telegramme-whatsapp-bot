@@ -779,7 +779,12 @@ def main() -> None:
     ))
     app.add_handler(ConversationHandler(
         entry_points=[CommandHandler("setphoto", setphoto_start)],
-        states={SETPHOTO_STEP: [MessageHandler(filters.PHOTO, setphoto_receive)]},
+        states={
+            SETPHOTO_STEP: [
+                MessageHandler(filters.PHOTO, setphoto_receive),
+                CommandHandler("setphoto", setphoto_start),
+            ],
+        },
         fallbacks=CANCEL,
     ))
     app.add_handler(ConversationHandler(
