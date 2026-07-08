@@ -693,6 +693,17 @@ async def post_init(application):
     logging.info(f"Bot username: @{BOT_USERNAME}")
 
 
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    logging.error("Exception while handling an update:", exc_info=context.error)
+    try:
+        if isinstance(update, Update) and update.effective_message:
+            await update.effective_message.reply_text(
+                "⚠️ Une erreur est survenue lors du traitement de cette commande."
+            )
+    except Exception:
+        pass
+
+
 def main() -> None:
     logging.info(f"Using SQLite database at: {DB_PATH}")
     logging.info(f"Database file exists before init: {os.path.exists(DB_PATH)}")
@@ -779,6 +790,8 @@ def main() -> None:
         ]},
         fallbacks=CANCEL,
     ))
+
+    app.add_error_handler(error_handler)
 
     logging.info("Bot is running...")
     app.run_polling()
