@@ -694,7 +694,12 @@ async def post_init(application):
 
 
 def main() -> None:
+    logging.info(f"Using SQLite database at: {DB_PATH}")
+    logging.info(f"Database file exists before init: {os.path.exists(DB_PATH)}")
     init_db()
+    with get_db() as conn:
+        btn_count = conn.execute("SELECT COUNT(*) FROM buttons").fetchone()[0]
+        logging.info(f"Buttons table has {btn_count} row(s) after init")
 
     app = ApplicationBuilder().token(TOKEN).post_init(post_init).build()
 
