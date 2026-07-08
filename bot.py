@@ -270,10 +270,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except Exception:
             pass
 
-    await update.message.reply_text(CHECKING_MESSAGE)
-    delay = float(get_setting("delay", "2"))
-    await asyncio.sleep(delay)
-
     title        = get_setting("title")
     welcome_text = get_setting("welcome_text")
     caption      = f"{title}\n\n{welcome_text}" if title else welcome_text
